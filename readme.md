@@ -7,6 +7,7 @@
 像这样的应用，应该有属于自己的程序窗口与桌面空间。
 
 
+
 ##### 微信登陆代理实现目标
 
 提供后台服务，管理微信登陆会话，负责与服务器通信。
@@ -16,6 +17,7 @@
 以后台服务的方式运行，占用资源少，并且能够长时间运行，避免了需要经常手机扫描登陆的麻烦。
 
 不过，由于这个代理提供的消息服务不再有认证等安全功能，登陆代理最好安装在安全的机器上，像本机上，或者是内网的私有服务器上。
+
 
 
 ##### 微信登陆代理原理
@@ -37,75 +39,94 @@
 这样有两个好处，启动不再需要root权限，并且能够很好的实现多用户多实例隔离支持。
 
 
+
 ##### 微信登陆代理程序及客户端
 
 wxagent: 使用PyQt5实现的wxagent后台服务程序。
 
-    cd /path/to/wxagent
-    python setup.py install
-    /usr/bin/wxagent
+``` 
+cd /path/to/wxagent
+python setup.py install
+/usr/bin/wxagent
 
-    在有包管理的系统上，可以使用systemd启动服务：
-    systemd --user start wxagent.service
-       
+在有包管理的系统上，可以使用systemd启动服务：
+systemd --user start wxagent.service
+```
 
-wxaui: 使用PyQt5实现的简易wxagent客户端，显示微信登陆二维码，接收消息（消息未分类）。
+wxaui: 使用PyQt5实现的简易wxagent客户端，显示微信登陆二维码，接收消息（消息未分类），处理部分接收的图片。选中用户，发送消息。
 
-      /usr/bin/wxaui
+``` 
+  /usr/bin/wxaui
+```
 
 wx2tox: 使用PyQt5实现的wxagent客户端，并将收到的消息分类转发到qTox IM客户端，以qTox(toxcore)群形式表示微信聊天会话。
 
-      /usr/bin/wx2tox
-
-
+``` 
+  /usr/bin/wx2tox
+```
 
 ##### 微信登陆代理模块
 
 
-* 服务端
-* 客户端
-* dbus服务方法
-* dbus总线事件
 
+- 服务端
+- 客户端
+- dbus服务方法
+- dbus总线事件
 
 ##### 微信登陆代理提供的服务API
 
 wxagent提供的dbus服务方法： dbus://io.qtc.wxagent
 
 
+
 islogined: sync方法, 参数表，无
 
-    返回值：bool
+``` 
+返回值：bool
+```
 
 getqrpic: sync方法，参数表，无
 
-    返回值：image/jpeg data, base64 encoded
+``` 
+返回值：image/jpeg data, base64 encoded
+```
 
 refresh: sync方法，参数表，无
 
-    返回值：bool
+``` 
+返回值：bool
+```
 
 logout: sync方法，参数表，无
 
-    返回值：bool
+``` 
+返回值：bool
+```
 
 getinitdata: sync方法，参数表，无
 
-    返回值：json string
+``` 
+返回值：json string
+```
 
 getcontact: sync方法，参数表，无
 
-    返回值：json string
+``` 
+返回值：json string
+```
 
 sendmessage: sync方法，
 
-    参数表：(from_username str, to_username str, content str, msgtype int)
-    返回值：json string
-    
+``` 
+参数表：(from_username str, to_username str, content str, msgtype int)
+返回值：json string
+```
 
 dumpinfo: sync方法，参数表，无
 
 geturl: async方法，参数表，(url str)
+
 
 
 wxagent提供的dbus事件信号： dbus://io.qtc.wxagent.signals
@@ -115,6 +136,7 @@ logined: 参数，bool
 logouted: 参数，bool
 
 newmessage: 参数，json string
+
 
 
 ##### 微信web版协议
